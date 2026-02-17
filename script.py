@@ -6,14 +6,14 @@ USERNAME = os.getenv("TRAINEX_USER")
 PASSWORD = os.getenv("TRAINEX_PASS")
 
 LOGIN_URL = "https://trex.phwt.de/phwt-trainex//login.cfm"
-ICAL_URL = "https://trex.phwt.de/phwt-trainex//cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm?TokCF19=0T1320846724&IDphp17=3P846724&sec18m=7S208467241320846724&1771320846877&utag=17&umonat=2&ujahr=2026&ics=1"
+ICAL_DOWNLOAD_LINK_TEXT = "iCal"  # der Text des Links auf der Seite
 
 OUTPUT_FILE = Path("stundenplan.ics")
 
 def download_ical():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(accept_downloads=True)  # sehr wichtig
+        context = browser.new_context(accept_downloads=True)
         page = context.new_page()
 
         # Login
@@ -24,9 +24,10 @@ def download_ical():
         page.click("#btnanm")
         page.wait_for_load_state("networkidle")
 
-        # Direkt Download starten
+        # Download auslösen
+        # Hier klicken wir den Link auf der Seite, nicht direkt goto
         with page.expect_download() as download_info:
-            page.goto(ICAL_URL)  # jetzt startet der Download
+            page.click(f"text={ICAL_DOWNLOAD_LINK_TEXT}")  
 
         download = download_info.value
         download.save_as(OUTPUT_FILE)
