@@ -46,18 +46,19 @@
      		<B>Fehlerdiagnose</B>:<font size="-3">
             <ul>
             <li>Ich habe vorher probiert/geklickt: ______ 
-               <li>Das Problem trat auf am <strong>{ts '2026-02-17 15:06:00'}</strong>.</li>
+               <li>Das Problem trat auf am <strong>{ts '2026-02-17 15:23:34'}</strong>.</li>
                
                <li>Aufgerufen wurde die Seite <strong>/phwt-trainex/cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm</strong>.</li>
-               <li>Vorige Seite war <strong></strong>.</li>
+               <li>Vorige Seite war <strong>https://trex.phwt.de/phwt-trainex/navigation/TraiNex</strong>.</li>
                <li>Übergebene Parameter waren <strong>TokCF19=0T1328959301&IDphp17=3P959301&sec18m=7S289593011328959301&1771328959448&utag=17&umonat=2&ujahr=2026&ics=1</strong>.</li>
                <LI> Die komplette technische Fehlermeldung lautet:<BR> 
 			   
 			   
-			   <LI>ID: 8614 1 Element TEMPICAL is undefined in SESSION.  <br>The error occurred on line 3. 
+			   <LI>ID: 8614 1  <BR><BR><font color="red">als Entwickler doch:</font><BR><BR>
+			   Element TEMPICAL is undefined in SESSION.  <br>The error occurred on line 3. 
 			   
 			   </font>
-               <li>Verwendet wurde python-requests/2.32.5.</li>
+               <li>Verwendet wurde Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36.</li>
 			  
 
                
