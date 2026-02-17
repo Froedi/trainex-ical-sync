@@ -1,36 +1,19 @@
 import os
-from playwright.sync_api import sync_playwright
+import requests
 
+# GitHub Secrets
 USERNAME = os.getenv("TRAINEX_USER")
 PASSWORD = os.getenv("TRAINEX_PASS")
 
-LOGIN_URL = "https://trex.phwt.de/phwt-trainex//login.cfm"
-STUNDENPLAN_URL = "HIER_STUNDENPLAN_URL_EINFÜGEN"
+# Direkte ICS URL
+STUNDENPLAN_URL = "https://trex.phwt.de/phwt-trainex//cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm?TokCF19=0T1320846724&IDphp17=3P846724&sec18m=7S208467241320846724&1771320846877&utag=17&umonat=2&ujahr=2026&ics=1"
 
 def download_ical():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
-
-        # Login
-        page.goto(LOGIN_URL)
-        page.fill("input[name='username']", USERNAME)  # ggf. anpassen
-        page.fill("input[name='password']", PASSWORD)  # ggf. anpassen
-        page.click("input[type='submit']")  # ggf. anpassen
-        page.wait_for_load_state("networkidle")
-
-        # Stundenplan-Seite
-        page.goto(STUNDENPLAN_URL)
-
-        # iCal Download
-        with page.expect_download() as download_info:
-            page.click("text=iCal")  # ggf. anpassen
-
-        download = download_info.value
-        download.save_as("stundenplan.ics")
-
-        browser.close()
+    response = requests.get(STUNDENPLAN_URL, auth=(USERNAME, PASSWORD))
+    response.raise_for_status()
+    with open("stundenplan.ics", "wb") as f:
+        f.write(response.content)
+    print("iCal erfolgreich aktualisiert!")
 
 if __name__ == "__main__":
     download_ical()
