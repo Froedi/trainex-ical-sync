@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+import asyncio
+from playwright.async_api import async_playwright
 
 USERNAME = os.getenv("TRAINEX_USER")
 PASSWORD = os.getenv("TRAINEX_PASS")
@@ -14,29 +15,29 @@ ICAL_PAGE_URL = (
 
 OUTPUT_FILE = Path("./trainex.studienplan.ics")
 
-def download_ical():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(accept_downloads=True)
-        page = context.new_page()
+
+async def download_ical():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(accept_downloads=True)
+        page = await context.new_page()
 
         # --- Login ---
-        page.goto(LOGIN_URL)
-        page.wait_for_selector("#Login", timeout=60000)
-        page.fill("#Login", USERNAME)
-        page.fill("#Passwort", PASSWORD)
-        page.click("#btnanm")
-        page.wait_for_load_state("networkidle")
+        await page.goto(LOGIN_URL)
+        await page.fill("#Login", USERNAME)
+        await page.fill("#Passwort", PASSWORD)
+        await page.click("#btnanm")
+        await page.wait_for_load_state("networkidle")
 
         # --- Download abfangen ---
-        with page.expect_download() as download_info:
-            page.goto(ICAL_PAGE_URL)  # Direktlink, der Datei ausliefert
-        download = download_info.value
-        download.save_as(str(OUTPUT_FILE))
-
+        async with page.expect_download() as download_info:
+            await page.goto(ICAL_PAGE_URL)
+        download = await download_info.value
+        await download.save_as(str(OUTPUT_FILE))
         print(f"iCal erfolgreich gespeichert: {OUTPUT_FILE}")
 
-        browser.close()
+        await browser.close()
+
 
 if __name__ == "__main__":
-    download_ical()
+    asyncio.run(download_ical())
