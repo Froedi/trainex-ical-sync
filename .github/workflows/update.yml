@@ -29,6 +29,17 @@ jobs:
           TRAINEX_USER: ${{ secrets.TRAINEX_USER }}
           TRAINEX_PASS: ${{ secrets.TRAINEX_PASS }}
         run: python script.py
+      - name: ICS committen und pushen
+        run: |
+         git config user.name "github-actions"
+         git config user.email "actions@github.com"
+         git add trainex.studienplan.ics  # Datei zum Commit hinzufügen
+         if git diff --cached --quiet; then
+         echo "Keine Änderungen, Commit übersprungen"
+         else
+         git commit -m "Update Trainex ICS"
+         git push origin main
+         fi
 
       - name: ICS committen und pushen
         uses: ad-m/github-push-action@v0.6.0
