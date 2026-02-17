@@ -1,0 +1,39 @@
+name: Update Trainex ICS
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # alle 6 Stunden
+  workflow_dispatch:  # manuelles Triggern möglich
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install playwright
+          playwright install
+
+      - name: Run script
+        env:
+          TRAINEX_USER: ${{ secrets.TRAINEX_USER }}
+          TRAINEX_PASS: ${{ secrets.TRAINEX_PASS }}
+        run: python script.py
+
+      - name: Commit ICS
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add stundenplan.ics
+          git commit -m "Update ICS" || echo "No changes"
+          git push
