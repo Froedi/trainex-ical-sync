@@ -17,7 +17,7 @@ OUTPUT_FILE = Path("./trainex.studienplan.ics")
 def download_ical():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(accept_downloads=True)  # wichtig für Downloads
+        context = browser.new_context(accept_downloads=True)
         page = context.new_page()
 
         # --- Login ---
@@ -28,14 +28,9 @@ def download_ical():
         page.click("#btnanm")
         page.wait_for_load_state("networkidle")
 
-        # --- iCal-Seite aufrufen und Download starten ---
-        page.goto(ICAL_PAGE_URL)
-
         # --- Download abfangen ---
         with page.expect_download() as download_info:
-            # Klick auf den iCal-Link, falls nötig. Bei Direktlink funktioniert manchmal goto
-            # page.click("text=iCal")  # nur nötig, wenn die Datei nicht automatisch startet
-            pass  # Bei Direktlink startet der Download sofort
+            page.goto(ICAL_PAGE_URL)  # Direktlink, der Datei ausliefert
         download = download_info.value
         download.save_as(str(OUTPUT_FILE))
 
