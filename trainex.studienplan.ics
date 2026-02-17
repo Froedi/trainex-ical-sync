@@ -1,0 +1,84 @@
+<html>
+<head>
+   <title>Fehlermeldung</title>
+</head>
+
+
+
+<body bgcolor="silver">
+
+<div align="center">
+
+
+
+
+
+<BR><BR>
+   <table border="1" bgcolor="white" width="80%">
+      <tr>
+         <td align="center" valign="top">
+            <h2>Oh, es gab ein technisches Problem!<BR>
+            Entschuldigen Sie die Unterbrechung.<BR>
+            Helfen Sie uns, das Problem zu beheben?</h2>
+			
+			
+
+           
+           Sollte der Fehler wiederholt auftreten, so mailen Sie bitte die Fehlerdiagnose an <BR>
+		   <!-- email_off -->Fehlermeldung@trainings-online.de<!--/email_off--><BR><BR>
+		   
+		   
+		   
+		   <BR>Hilfreich wäre es, wenn Sie kurz beschreiben,<BR>wie es zu dem Problem kam und was Sie vorher geklickt hatten.
+           <BR><B>Vielen Dank.</B><BR>
+			</td>
+                     <td align="center" valign="top">
+            <img src="https://trainex24.de/diverses/ak_meld_pics/b2.jpg" height="150">
+            </td>
+      </tr>
+      
+
+      
+      
+
+      <tr>
+         <td align="left" valign="top" colspan="2">
+     		<B>Fehlerdiagnose</B>:<font size="-3">
+            <ul>
+            <li>Ich habe vorher probiert/geklickt: ______ 
+               <li>Das Problem trat auf am <strong>{ts '2026-02-17 15:06:00'}</strong>.</li>
+               
+               <li>Aufgerufen wurde die Seite <strong>/phwt-trainex/cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm</strong>.</li>
+               <li>Vorige Seite war <strong></strong>.</li>
+               <li>Übergebene Parameter waren <strong>TokCF19=0T1328959301&IDphp17=3P959301&sec18m=7S289593011328959301&1771328959448&utag=17&umonat=2&ujahr=2026&ics=1</strong>.</li>
+               <LI> Die komplette technische Fehlermeldung lautet:<BR> 
+			   
+			   
+			   <LI>ID: 8614 1 Element TEMPICAL is undefined in SESSION.  <br>The error occurred on line 3. 
+			   
+			   </font>
+               <li>Verwendet wurde python-requests/2.32.5.</li>
+			  
+
+               
+            </ul>
+			
+            
+            
+
+            
+            
+            
+           
+         </td>
+      </tr>
+      <tr>
+         <td align="left" valign="top">
+         </td>
+      </tr>
+   </table>
+</div>
+
+
+</body>
+</html>
