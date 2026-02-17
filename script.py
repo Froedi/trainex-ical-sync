@@ -9,7 +9,7 @@ PASSWORD = os.getenv("TRAINEX_PASS")
 LOGIN_URL = "https://trex.phwt.de/phwt-trainex/"
 ICAL_URL = "https://trex.phwt.de/phwt-trainex/cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm?TokCF19=0T1328959301&IDphp17=3P959301&sec18m=7S289593011328959301&1771328959448&utag=17&umonat=2&ujahr=2026&ics=1"
 
-OUTPUT_FILE = Path("trainex.studienplan.ics")
+OUTPUT_FILE = Path("./trainex.studienplan.ics")
 
 def download_ical():
     with sync_playwright() as p:
