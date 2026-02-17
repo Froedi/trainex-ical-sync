@@ -1,5 +1,4 @@
 import os
-import requests
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -7,14 +6,18 @@ USERNAME = os.getenv("TRAINEX_USER")
 PASSWORD = os.getenv("TRAINEX_PASS")
 
 LOGIN_URL = "https://trex.phwt.de/phwt-trainex/"
-ICAL_URL = "https://trex.phwt.de/phwt-trainex/cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm?TokCF19=0T1328959301&IDphp17=3P959301&sec18m=7S289593011328959301&1771328959448&utag=17&umonat=2&ujahr=2026&ics=1"
+ICAL_PAGE_URL = (
+    "https://trex.phwt.de/phwt-trainex/cfm/einsatzplan/einsatzplan_listenansicht_iCal.cfm?"
+    "TokCF19=0T1328959301&IDphp17=3P959301&sec18m=7S289593011328959301&"
+    "1771328959448&utag=17&umonat=2&ujahr=2026&ics=1"
+)
 
 OUTPUT_FILE = Path("./trainex.studienplan.ics")
 
 def download_ical():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
+        context = browser.new_context(accept_downloads=True)  # wichtig für Downloads
         page = context.new_page()
 
         # --- Login ---
@@ -25,17 +28,20 @@ def download_ical():
         page.click("#btnanm")
         page.wait_for_load_state("networkidle")
 
-        # --- Session-Cookies auslesen ---
-        cookies = context.cookies()
-        session_cookies = {cookie['name']: cookie['value'] for cookie in cookies}
+        # --- iCal-Seite aufrufen und Download starten ---
+        page.goto(ICAL_PAGE_URL)
+
+        # --- Download abfangen ---
+        with page.expect_download() as download_info:
+            # Klick auf den iCal-Link, falls nötig. Bei Direktlink funktioniert manchmal goto
+            # page.click("text=iCal")  # nur nötig, wenn die Datei nicht automatisch startet
+            pass  # Bei Direktlink startet der Download sofort
+        download = download_info.value
+        download.save_as(str(OUTPUT_FILE))
+
+        print(f"iCal erfolgreich gespeichert: {OUTPUT_FILE}")
 
         browser.close()
-
-    # --- Download der iCal-Datei mit requests ---
-    response = requests.get(ICAL_URL, cookies=session_cookies)
-    response.raise_for_status()  # Fehler falls Download fehlschlägt
-    OUTPUT_FILE.write_bytes(response.content)
-    print(f"iCal erfolgreich gespeichert: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     download_ical()
